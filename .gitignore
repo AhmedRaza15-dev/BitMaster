@@ -1,0 +1,7 @@
+# Object files and executables
+*.o
+bitmaster
+
+# Temporary files
+*.tmp
+*.swp
