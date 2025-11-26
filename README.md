@@ -20,6 +20,11 @@ Built with NASM for x86 architecture. Developed and tested on Ubuntu Linux syste
 - **Assembly** – Low-level bit manipulation implementations  
 - **Shell Scripting** – Automation and utility scripts  
 
+## 📊 Flow Chart
+
+<img width="4426" height="7718" alt="deepseek_mermaid_20251123_9915ba" src="https://github.com/user-attachments/assets/cec3e284-2681-4027-8ff8-e124677d8095" />
+
+
 ## 🚀 Features
 
 - Efficient bit manipulation algorithms  
