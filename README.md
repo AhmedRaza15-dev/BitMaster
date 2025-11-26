@@ -42,7 +42,19 @@ cd BitMaster-Bit-Manipulation
 ./bitmaster --help
 ```
 
+## 📸 Output
 
+<div align="center">
+<img width="1009" height="656" alt="image" src="https://github.com/user-attachments/assets/8cd35a4c-f621-443d-9bff-11d2e1d5b6b6" />
+<img width="1023" height="665" alt="image" src="https://github.com/user-attachments/assets/92867bfc-54f5-489d-9575-9655d470c9aa" />
+<img width="1215" height="795" alt="image" src="https://github.com/user-attachments/assets/f9adc0c1-296f-4ad5-87c7-bc26a0fe38c3" />
+
+
+
+
+*Example output demonstrating bit manipulation results*
+
+</div>
 
 ## 🤝 Contributing
 
