@@ -1,5 +1,4 @@
 section .data
-    ; Text messages and prompts
     welcome_msg    db "BITMASTER - Bit Manipulation Tool", 13, 10
                   db "==================================", 13, 10, 0
     prompt_num     db "Enter a number (0-255): ", 0
@@ -19,8 +18,6 @@ section .data
     toggle_msg     db "TOGGLE bit ", 0
     newline        db 13, 10, 0
     separator      db "----------------", 13, 10, 0
-    
-    ; Error messages
     error_range    db "Error: Number must be 0-255!", 13, 10, 0
     error_bit      db "Error: Bit position must be 0-7!", 13, 10, 0
     error_choice   db "Error: Choice must be 1-3!", 13, 10, 0
@@ -36,40 +33,25 @@ section .text
     global _start
 
 _start:
-    ; Display welcome message
     mov ecx, welcome_msg
     call print_string
-    
+
 main_loop:
-    ; Get number from user
     call get_number
     mov [number], al
-    
-    ; Get bit position from user  
     call get_bit_position
     mov [bit_pos], al
-    
-    ; Get operation choice
     call get_operation
     mov [operation], al
-    
-    ; Perform the operation and display results
     call perform_operation
     call display_results
-    
-    ; Ask if user wants to continue
     call ask_continue
     cmp al, 'y'
     je main_loop
-    
-    ; Exit program
     mov eax, 1
     mov ebx, 0
     int 0x80
 
-; ============ SUBROUTINES ============
-
-; Get number from user (0-255)
 get_number:
     mov ecx, prompt_num
     call print_string
@@ -83,7 +65,6 @@ get_number:
     call print_string
     jmp get_number
 
-; Get bit position from user (0-7)
 get_bit_position:
     mov ecx, prompt_bit
     call print_string
@@ -97,7 +78,6 @@ get_bit_position:
     call print_string
     jmp get_bit_position
 
-; Get operation choice from user (1-3)
 get_operation:
     mov ecx, prompt_choice
     call print_string
@@ -113,57 +93,47 @@ get_operation:
     call print_string
     jmp get_operation
 
-; Perform the selected bit operation
 perform_operation:
     mov al, [number]
     mov cl, [bit_pos]
     mov bl, 1
-    shl bl, cl      ; Create bit mask
-    
+    shl bl, cl
     cmp byte [operation], 1
     je .set_bit
     cmp byte [operation], 2
     je .clear_bit
     cmp byte [operation], 3
     je .toggle_bit
-    
 .set_bit:
-    or al, bl       ; Set the bit
+    or al, bl
     jmp .done
 .clear_bit:
-    not bl          ; Invert mask
-    and al, bl      ; Clear the bit
+    not bl
+    and al, bl
     jmp .done
 .toggle_bit:
-    xor al, bl      ; Toggle the bit
+    xor al, bl
 .done:
-    mov [number], al ; Store result back
+    mov [number], al
     ret
 
-; Display operation results
 display_results:
     mov ecx, result_msg
     call print_string
-    
-    ; Display original number
     mov ecx, original_msg
     call print_string
     mov al, [number]
     call print_number
     mov ecx, newline
     call print_string
-    
-    ; Display operation performed
     mov ecx, operation_msg
     call print_string
-    
     cmp byte [operation], 1
     je .show_set
     cmp byte [operation], 2
     je .show_clear
     cmp byte [operation], 3
     je .show_toggle
-    
 .show_set:
     mov ecx, set_msg
     call print_string
@@ -175,26 +145,21 @@ display_results:
 .show_toggle:
     mov ecx, toggle_msg
     call print_string
-    
 .show_bit_pos:
     mov al, [bit_pos]
     call print_number
     mov ecx, newline
     call print_string
-    
-    ; Display binary representation
     mov ecx, binary_msg
     call print_string
     mov al, [number]
     call print_binary
     mov ecx, newline
     call print_string
-    
     mov ecx, separator
     call print_string
     ret
 
-; Ask user if they want to continue
 ask_continue:
     mov ecx, newline
     call print_string
@@ -212,9 +177,6 @@ ask_continue:
     ret
 .prompt db "Continue? (y/n): ", 0
 
-; ============ UTILITY FUNCTIONS ============
-
-; Print string (address in ecx)
 print_string:
     push eax
     push ebx
@@ -234,7 +196,6 @@ print_string:
     pop eax
     ret
 
-; Read input into input_buffer
 read_input:
     push eax
     push ebx
@@ -245,7 +206,6 @@ read_input:
     mov ecx, input_buffer
     mov edx, 10
     int 0x80
-    ; Null terminate the string
     mov byte [ecx + eax - 1], 0
     pop edx
     pop ecx
@@ -253,7 +213,6 @@ read_input:
     pop eax
     ret
 
-; Convert string to number (result in eax)
 string_to_number:
     push ebx
     push ecx
@@ -276,7 +235,6 @@ string_to_number:
     pop ebx
     ret
 
-; Print number in decimal (value in al)
 print_number:
     push eax
     push ebx
@@ -310,7 +268,6 @@ print_number:
     pop eax
     ret
 
-; Print number in binary (value in al)
 print_binary:
     push eax
     push ebx
@@ -341,4 +298,3 @@ print_binary:
     pop ebx
     pop eax
     ret
-
