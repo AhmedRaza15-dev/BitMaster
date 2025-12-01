@@ -11,6 +11,8 @@ section .data
     result_msg     db 13, 10, "Operation Result:", 13, 10
                   db "================", 13, 10, 0
     original_msg   db "Original number: ", 0
+    original_bin   db "Original binary: ", 0
+    new_num_msg    db "New number: ", 0
     binary_msg     db "Binary: ", 0
     operation_msg  db "Operation: ", 0
     set_msg        db "SET bit ", 0
@@ -24,6 +26,7 @@ section .data
 
 section .bss
     number         resb 1
+    original_num   resb 1
     bit_pos        resb 1
     operation      resb 1
     input_buffer   resb 10
@@ -39,10 +42,12 @@ _start:
 main_loop:
     call get_number
     mov [number], al
+    mov [original_num], al
     call get_bit_position
     mov [bit_pos], al
     call get_operation
     mov [operation], al
+    call display_original
     call perform_operation
     call display_results
     call ask_continue
@@ -94,7 +99,7 @@ get_operation:
     jmp get_operation
 
 perform_operation:
-    mov al, [number]
+    mov al, [original_num]
     mov cl, [bit_pos]
     mov bl, 1
     shl bl, cl
@@ -117,15 +122,38 @@ perform_operation:
     mov [number], al
     ret
 
+display_original:
+    mov ecx, newline
+    call print_string
+    mov ecx, separator
+    call print_string
+    mov ecx, original_msg
+    call print_string
+    mov al, [original_num]
+    call print_number
+    mov ecx, newline
+    call print_string
+    mov ecx, original_bin
+    call print_string
+    mov al, [original_num]
+    call print_binary
+    mov ecx, newline
+    call print_string
+    mov ecx, separator
+    call print_string
+    ret
+
 display_results:
     mov ecx, result_msg
     call print_string
-    mov ecx, original_msg
+    
+    mov ecx, new_num_msg
     call print_string
     mov al, [number]
     call print_number
     mov ecx, newline
     call print_string
+    
     mov ecx, operation_msg
     call print_string
     cmp byte [operation], 1
@@ -150,12 +178,14 @@ display_results:
     call print_number
     mov ecx, newline
     call print_string
+    
     mov ecx, binary_msg
     call print_string
     mov al, [number]
     call print_binary
     mov ecx, newline
     call print_string
+    
     mov ecx, separator
     call print_string
     ret
